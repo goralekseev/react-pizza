@@ -22,11 +22,13 @@ function App(props) {
           <div className='content__items'>
             {pizzas.map((obj) => (
               <PizzaBlock
-                title={obj.title}
-                price={obj.price}
-                image={obj.imageUrl}
-                sizes={obj.sizes}
-                types={obj.types}
+                key={obj.id}
+                {...obj}
+                // title={obj.title} The same< but with spread its shorter code
+                // price={obj.price}
+                // image={obj.imageUrl}
+                // sizes={obj.sizes}
+                // types={obj.types}
               />
             ))}
           </div>
