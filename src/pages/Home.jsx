@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { SearchContext } from "../App";
 
 import "../scss/app.scss";
 
@@ -8,7 +9,8 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Sleleton";
 import Pagination from "../components/Pagination/Pagination";
 
-const Home = ({ searchValue }) => {
+const Home = () => {
+  const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryId, setcategoryId] = useState(0);
@@ -26,6 +28,10 @@ const Home = ({ searchValue }) => {
     setSortType(id);
   };
 
+  const onChangePage = (number) => {
+    setCurrentPage(number);
+  };
+
   useEffect(() => {
     setIsLoading(true);
 
@@ -35,7 +41,7 @@ const Home = ({ searchValue }) => {
     const search = searchValue ? `&search=${searchValue}` : "";
 
     fetch(
-      `https://6292ef7e089f87a57ab6b800.mockapi.io/items?page=${currentPage}&limit=8&${category}&sortBy=${sortBy}&order=${order}${search}`
+      `https://6292ef7e089f87a57ab6b800.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
     ).then((res) =>
       res.json().then((arr) => {
         setItems(arr);
@@ -75,7 +81,7 @@ const Home = ({ searchValue }) => {
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
-      <Pagination onChangePage={(number) => setCurrentPage(number)} />
+      <Pagination onChangePage={onChangePage} />
     </div>
   );
 };
