@@ -1,31 +1,32 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SearchContext } from "../App";
+import { useSelector, useDispatch } from "react-redux";
 
-import "../scss/app.scss";
-
+import { setCategoryId } from "../redux/slices/filterSlice";
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Sleleton";
 import Pagination from "../components/Pagination/Pagination";
+import { SearchContext } from "../App";
+
+import "../scss/app.scss";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state) => state.filter.categoryId);
+  const sortType = useSelector((state) => state.filter.sort.sortProperty);
+
   const { searchValue } = useContext(SearchContext);
   const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [categoryId, setcategoryId] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortType, setSortType] = useState({
-    name: "популярности",
-    sortProperty: "rating",
-  });
+  // const [sortType, setSortType] = useState({
+  //   name: "популярности",
+  //   sortProperty: "rating",
+  // });
 
   const onClickCategory = (id) => {
-    setcategoryId(id);
-  };
-
-  const onClickSort = (id) => {
-    setSortType(id);
+    dispatch(setCategoryId(id));
   };
 
   const onChangePage = (number) => {
@@ -35,8 +36,8 @@ const Home = () => {
   useEffect(() => {
     setIsLoading(true);
 
-    const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
-    const sortBy = sortType.sortProperty.replace("-", "");
+    const order = sortType.includes("-") ? "asc" : "desc";
+    const sortBy = sortType.replace("-", "");
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
@@ -72,12 +73,7 @@ const Home = () => {
             onClickCategory(id);
           }}
         />
-        <Sort
-          value={sortType}
-          onClickSort={(id) => {
-            onClickSort(id);
-          }}
-        />
+        <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
