@@ -9,6 +9,8 @@ import {
   setCurrentPage,
   setFilters,
 } from "../redux/slices/filterSlice";
+import { setItems, fetchPizzas } from "../redux/slices/pizzaSlice";
+
 import Categories from "../components/Categories";
 import Sort, { list } from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
@@ -27,10 +29,10 @@ const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const sortType = useSelector((state) => state.filter.sort.sortProperty);
   const currentPage = useSelector((state) => state.filter.currentPage);
+  const { status, items } = useSelector((state) => state.pizza);
 
   const { searchValue } = useContext(SearchContext);
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  //const [isLoading, setIsLoading] = useState(true);
   //const [currentPage] = useState(1);
   // const [sortType, setSortType] = useState({
   //   name: "популярности",
@@ -45,22 +47,45 @@ const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
-  const fetchPizzas = () => {
-    setIsLoading(true);
-
+  const getPizzas = async () => {
     const order = sortType.includes("-") ? "asc" : "desc";
     const sortBy = sortType.replace("-", "");
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
-    axios
-      .get(
-        `https://6292ef7e089f87a57ab6b800.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+    //   axios
+    //     .get(
+    //       `https://6292ef7e089f87a57ab6b800.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
+    //     )
+    //     .then((res) => {
+    //       setItems(res.data);
+    //       setIsLoading(false);
+    //     })
+    //        .catch((err =>{
+    //            console.log(err)
+    //}));
+    // };
+
+    // try {
+    // const res = await axios.get(
+    //   `https://6292ef7e089f87a57ab6b800.mockapi.io/items?page=${currentPage}&limit=4&${category}&sortBy=${sortBy}&order=${order}${search}`
+    // );
+
+    dispatch(
+      fetchPizzas({
+        order,
+        sortBy,
+        category,
+        search,
+        currentPage,
+      })
+    );
+    //   } catch (error) {
+    //     alert("Error in getting data");
+    //     console.log("ERROR", error);
+    //   } finally {
+    //     //setIsLoading(false);
+    //   }
   };
 
   // if parametres changed and it is 2 render
@@ -94,7 +119,7 @@ const Home = () => {
     window.scrollTo(0, 0);
 
     if (!isSearch.current) {
-      fetchPizzas();
+      getPizzas();
     }
 
     isSearch.current = false;
@@ -124,7 +149,17 @@ const Home = () => {
         <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
-      <div className='content__items'>{isLoading ? skeletons : pizzas}</div>
+      {status === "error" ? (
+        <div className='content__error-info'>
+          <h2>Cart is empty 😕 </h2>
+          <p>Cant find pizza list</p>
+        </div>
+      ) : (
+        <div className='content__items'>
+          {status === "loading" ? skeletons : pizzas}
+        </div>
+      )}
+
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );

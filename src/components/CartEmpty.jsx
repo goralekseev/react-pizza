@@ -5,13 +5,11 @@ const CartEmpty = () => {
   return (
     <>
       <div className='cart cart--empty'>
-        <h2>
-          Корзина пустая <icon>😕</icon>
-        </h2>
+        <h2>Cart is empty 😕</h2>
         <p>
-          Вероятней всего, вы не заказывали ещё пиццу.
+          Probaply you haven't order pizza yet.
           <br />
-          Для того, чтобы заказать пиццу, перейди на главную страницу.
+          Return back to main page for order.
         </p>
         <img src={emptyCartImg} alt='Empty cart' />
         <Link to='/' className='button button--black'>
