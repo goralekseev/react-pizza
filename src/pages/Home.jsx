@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import axios from "axios";
 import qs from "qs";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import {
   setCategoryId,
@@ -134,11 +134,12 @@ const Home = () => {
   }, [categoryId, sort, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => (
-    <PizzaBlock
-      key={obj.id}
-      {...obj}
-      // title={obj.title} The same< but with spread it`s shorter code
-    />
+    <Link to={`/pizza/${obj.id}`} key={obj.id}>
+      <PizzaBlock
+        {...obj}
+        // title={obj.title} The same< but with spread it`s shorter code
+      />
+    </Link>
   ));
 
   const skeletons = [...new Array(6)].map((_, index) => (
