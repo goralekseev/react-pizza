@@ -8,8 +8,14 @@ import {
   setCategoryId,
   setCurrentPage,
   setFilters,
+  selectFilter,
+  searchValue,
 } from "../redux/slices/filterSlice";
-import { setItems, fetchPizzas } from "../redux/slices/pizzaSlice";
+import {
+  setItems,
+  fetchPizzas,
+  selectPizzaData,
+} from "../redux/slices/pizzaSlice";
 
 import Categories from "../components/Categories";
 import Sort, { list } from "../components/Sort";
@@ -26,12 +32,14 @@ const Home = () => {
   const isSearch = useRef(false);
   const isMounted = useRef(false);
 
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const sortType = useSelector((state) => state.filter.sort.sortProperty);
-  const currentPage = useSelector((state) => state.filter.currentPage);
-  const { status, items } = useSelector((state) => state.pizza);
+  //const categoryId = useSelector((state) => state.filter.categoryId);
+  //const sort = useSelector((state) => state.filter.sort.sortProperty);
+  //const currentPage = useSelector((state) => state.filter.currentPage);
+  const { categoryId, currentPage, sort, searchValue } =
+    useSelector(selectFilter);
 
-  const { searchValue } = useContext(SearchContext);
+  const { status, items } = useSelector(selectPizzaData);
+
   //const [isLoading, setIsLoading] = useState(true);
   //const [currentPage] = useState(1);
   // const [sortType, setSortType] = useState({
@@ -48,8 +56,8 @@ const Home = () => {
   };
 
   const getPizzas = async () => {
-    const order = sortType.includes("-") ? "asc" : "desc";
-    const sortBy = sortType.replace("-", "");
+    const order = sort.sortProperty.includes("-") ? "asc" : "desc";
+    const sortBy = sort.sortProperty.replace("-", "");
     const category = categoryId > 0 ? `category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
 
@@ -92,7 +100,7 @@ const Home = () => {
   useEffect(() => {
     if (isMounted.current) {
       const queryString = qs.stringify({
-        sortProperty: sortType,
+        sortProperty: sort,
         categoryId,
         currentPage,
       });
@@ -100,7 +108,7 @@ const Home = () => {
       navigate(`?${queryString}`);
     }
     isMounted.current = true;
-  }, [categoryId, sortType, currentPage]);
+  }, [categoryId, sort, currentPage]);
 
   //If first render, check URL params and save to Redux
   useEffect(() => {
@@ -123,7 +131,7 @@ const Home = () => {
     }
 
     isSearch.current = false;
-  }, [categoryId, sortType, searchValue, currentPage]);
+  }, [categoryId, sort, searchValue, currentPage]);
 
   const pizzas = items.map((obj) => (
     <PizzaBlock
