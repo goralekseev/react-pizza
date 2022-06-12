@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from "react";
-import axios from "axios";
+//import axios from "axios";
 import qs from "qs";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import {
   setCurrentPage,
   setFilters,
   selectFilter,
-  searchValue,
+  //searchValue,
 } from "../redux/slices/filterSlice";
 import {
   setItems,
@@ -22,11 +22,11 @@ import Sort, { list } from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Sleleton";
 import Pagination from "../components/Pagination/Pagination";
-import { SearchContext } from "../App";
+//import { SearchContext } from "../App";
 
 import "../scss/app.scss";
 
-const Home = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isSearch = useRef(false);
@@ -47,12 +47,12 @@ const Home = () => {
   //   sortProperty: "rating",
   // });
 
-  const onClickCategory = (id) => {
-    dispatch(setCategoryId(id));
+  const onClickCategory = (index: number) => {
+    dispatch(setCategoryId(index));
   };
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number));
+  const onChangePage = (page: number) => {
+    dispatch(setCurrentPage(page));
   };
 
   const getPizzas = async () => {
@@ -80,6 +80,7 @@ const Home = () => {
     // );
 
     dispatch(
+      // @ts-ignore
       fetchPizzas({
         order,
         sortBy,
@@ -133,7 +134,7 @@ const Home = () => {
     isSearch.current = false;
   }, [categoryId, sort, searchValue, currentPage]);
 
-  const pizzas = items.map((obj) => (
+  const pizzas = items.map((obj: any) => (
     <Link to={`/pizza/${obj.id}`} key={obj.id}>
       <PizzaBlock
         {...obj}
@@ -151,7 +152,7 @@ const Home = () => {
       <div className='content__top'>
         <Categories
           value={categoryId}
-          onClickCategory={(id) => {
+          onClickCategory={(id:any) => {
             onClickCategory(id);
           }}
         />
