@@ -12,7 +12,7 @@ const FullPizza: React.FC = () => {
     async function fetchPizza() {
       try {
         const { data } = await axios.get(
-          "https://6292ef7e089f87a57ab6b800.mockapi.io/items)" + id
+          "https://6292ef7e089f87a57ab6b800.mockapi.io/item" + id
         );
         setPizza(data);
       } catch (error) {
