@@ -1,21 +1,21 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSort, selectSort } from "../redux/slices/filterSlice";
+import { setSort, selectSort,SortPropertyEnum } from "../redux/slices/filterSlice";
 
-type ListItem={name: string; sortProperty: string};
+type ListItem={name: string; sortProperty: SortPropertyEnum};
 
 
 
 export const list: ListItem[] = [
-  { name: "популярности", sortProperty: "rating" },
-  { name: "популярности", sortProperty: "-rating" },
-  { name: "цене", sortProperty: "price" },
-  { name: "цене", sortProperty: "-price" },
-  { name: "алфавиту", sortProperty: "title" },
-  { name: "алфавиту", sortProperty: "-title" },
+  { name: "популярности", sortProperty: SortPropertyEnum.RATING_DESC },
+  { name: "популярности", sortProperty: SortPropertyEnum.RATING_ASC },
+  { name: "цене", sortProperty: SortPropertyEnum.PRICE_DESC },
+  { name: "цене", sortProperty: SortPropertyEnum.PRICE_ASC },
+  { name: "алфавиту", sortProperty: SortPropertyEnum.TITLE_DESC },
+  { name: "алфавиту", sortProperty: SortPropertyEnum.TITLE_ASC },
 ];
 
-function Sort() {
+function SortPopup() {
   const dispatch = useDispatch();
   const sort = useSelector(selectSort);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -82,4 +82,4 @@ function Sort() {
   );
 }
 
-export default Sort;
+export default SortPopup;
