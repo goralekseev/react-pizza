@@ -219,6 +219,24 @@ body {
       }
     }
 
+    &:disabled{
+      opacity: 0.4;
+      border-color: #787878;
+
+      &:active{
+        transform: none;
+      }
+
+      &:hover {
+        background-color: transparent;
+
+        svg path{
+          fill: #787878;
+        }
+      }
+    }
+
+
     &-price {
       display: flex;
       align-items: center;
@@ -231,6 +249,9 @@ body {
         letter-spacing: 0.01em;
       }
     }
+
+
+
 
     &-remove {
       display: flex;

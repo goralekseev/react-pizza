@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useEffect, useState, useContext, useRef, useCallback } from "react";
 //import axios from "axios";
 import qs from "qs";
 import { useSelector, useDispatch } from "react-redux";
@@ -50,9 +50,10 @@ const Home: React.FC = () => {
   //   sortProperty: "rating",
   // });
 
-  const onClickCategory = (index: number) => {
+  const onClickCategory = useCallback((index: number) => {
     dispatch(setCategoryId(index));
-  };
+  }, []);
+
 
   const onChangePage = (page: number) => {
     dispatch(setCurrentPage(page));
@@ -141,10 +142,9 @@ const Home: React.FC = () => {
     isSearch.current = false;
   }, [categoryId, sort, searchValue, currentPage]);
 
-  const pizzas = items.map((obj: any) => (
-      <PizzaBlock
-        {...obj}
-        // title={obj.title} The same< but with spread it`s shorter code
+  const pizzas = items.map((obj) => (
+      <PizzaBlock key={obj.id}
+    types={[]} sizes={[]} {...obj}        // title={obj.title} The same< but with spread it`s shorter code
       />
   
   ));
@@ -158,11 +158,11 @@ const Home: React.FC = () => {
       <div className='content__top'>
         <Categories
           value={categoryId}
-          onClickCategory={(id:any) => {
+          onClickCategory={(id) => {
             onClickCategory(id);
           }}
         />
-        <Sort />
+        <Sort value={sort}/>
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       {status === "error" ? (

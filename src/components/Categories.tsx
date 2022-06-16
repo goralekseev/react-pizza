@@ -1,12 +1,11 @@
-import React, {useState } from "react";
+import React, {memo, useState } from "react";
+import { useWhyDidYouUpdate } from 'ahooks';
 
 type CategoriesProps ={
   value: number;
   onClickCategory: (i: number) =>void;
 }
-
-const Categories: React.FC<CategoriesProps>=({ value, onClickCategory })=> {
-  const categories = [
+const categories = [
     "Все",
     "Мясные",
     "Вегетарианская",
@@ -14,6 +13,11 @@ const Categories: React.FC<CategoriesProps>=({ value, onClickCategory })=> {
     "Острые",
     "Закрытые",
   ];
+
+const Categories: React.FC<CategoriesProps>=memo(({ value, onClickCategory })=> {
+  
+
+  // useWhyDidYouUpdate('Categories', { value, onClickCategory });
 
   return (
     <div className='categories'>
@@ -34,5 +38,5 @@ const Categories: React.FC<CategoriesProps>=({ value, onClickCategory })=> {
     </div>
   );
 }
-
+)
 export default Categories;
