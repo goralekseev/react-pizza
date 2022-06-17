@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef, useCallback } from "react";
-import { setSearchValue } from "../../redux/slices/filterSlice";
+import { setSearchValue } from "../../redux/filter/slice";
 import { useDispatch } from "react-redux";
 import debounce from "lodash.debounce";
 //import { SearchContext } from "../../App";
