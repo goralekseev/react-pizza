@@ -137,10 +137,11 @@ const Home: React.FC = () => {
   //if first render happened fetch pizzas
   useEffect(() => {
     window.scrollTo(0, 0);
+    getPizzas()
 
-    if (!isSearch.current) {
-      getPizzas();
-    }
+    //if (!isSearch.current) {
+    //  getPizzas();
+   // }
 
     isSearch.current = false;
   }, [categoryId, sort, searchValue, currentPage]);
